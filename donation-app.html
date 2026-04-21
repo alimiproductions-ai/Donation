@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Don — Ensemble on avance</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:wght@700;800&family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&family=Unbounded:wght@700;800&family=Lexend:wght@400;500;600;700&family=Righteous&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F2EC;
+    --white: #FFFFFF;
+    --black: #111111;
+    --accent: #FF4D2E;
+    --accent2: #3AE8A0;
+    --text: #111111;
+    --muted: #6B6B6B;
+    --border: rgba(17,17,17,0.1);
+    --card: #FFFFFF;
+    --overlay: rgba(17,17,17,0.75);
+    --input-bg: #F5F2EC;
+    --pill-bg: #111111;
+    --pill-text: #FFFFFF;
+    --success: #1DB954;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --accent-rgb: 255,77,46;
+    --shadow-sm: 0 8px 24px rgba(var(--accent-rgb),0.25);
+    --shadow-md: 0 8px 32px rgba(var(--accent-rgb),0.30);
+    --shadow-lg: 0 12px 40px rgba(var(--accent-rgb),0.40);
+    --shadow-hover: 0 16px 48px rgba(var(--accent-rgb),0.12);
+    --accent-muted: rgba(var(--accent-rgb),0.07);
+    --accent-soft: rgba(var(--accent-rgb),0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ========= NOISE TEXTURE ========= */
+  body::before {
+    content: '';
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ========= HEADER ========= */
+  header {
+    position: fixed; top:0; left:0; right:0;
+    padding: 20px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(245,242,236,0.85);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .logo span { color: var(--accent); }
+  .header-btn {
+    background: var(--black);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .header-btn:hover { background: var(--accent); transform: scale(1.03); }
+
+  /* ========= HERO ========= */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+    z-index: 1;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-cta {
+    display: flex; gap: 16px; align-items: center; justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--text);
+    padding: 14px 36px;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { background: var(--text); color: var(--bg); }
+
+  /* ========= FLOATING SHAPES ========= */
+  .shapes { position: fixed; top:0; left:0; right:0; bottom:0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .shape {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.07;
+  }
+  .s1 { width: 500px; height: 500px; background: var(--accent); top: -100px; right: -100px; animation: float 8s ease-in-out infinite; }
+  .s2 { width: 300px; height: 300px; background: var(--accent2); bottom: 100px; left: -80px; animation: float 10s 2s ease-in-out infinite reverse; }
+  .s3 { width: 200px; height: 200px; background: var(--black); top: 40%; left: 20%; animation: float 7s 1s ease-in-out infinite; }
+
+  /* ========= STATS STRIP ========= */
+  .stats {
+    position: relative; z-index: 1;
+    display: flex; gap: 0;
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    background: var(--white);
+  }
+  .stat-item {
+    flex: 1;
+    padding: 40px 32px;
+    text-align: center;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 40px;
+    font-weight: 800;
+    color: var(--accent);
+    display: block;
+  }
+  .stat-label {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ========= FORMULES SECTION ========= */
+  .section {
+    position: relative; z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 100px 40px;
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1.05;
+    margin-bottom: 60px;
+  }
+  .formules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+  .formule-card {
+    background: var(--white);
+    border: 2px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 28px;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .formule-card:hover, .formule-card.active {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+  .formule-card.featured {
+    background: var(--black);
+    border-color: var(--black);
+    color: #fff;
+  }
+  .formule-card.featured .formule-price, .formule-card.featured .formule-name { color: #fff; }
+  .formule-card.featured .formule-desc { color: rgba(255,255,255,0.6); }
+  .formule-badge {
+    position: absolute; top:16px; right:16px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .formule-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+  .formule-price {
+    font-family: var(--font-display);
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    color: var(--text);
+  }
+  .formule-price sup { font-size: 20px; vertical-align: top; margin-top: 8px; }
+  .formule-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 12px 0 8px;
+    color: var(--text);
+  }
+  .formule-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .formule-btn {
+    width: 100%;
+    margin-top: 28px;
+    padding: 12px;
+    border-radius: 100px;
+    border: 2px solid currentColor;
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .formule-card:not(.featured) .formule-btn { color: var(--accent); border-color: var(--accent); }
+  .formule-card:not(.featured) .formule-btn:hover { background: var(--accent); color: #fff; }
+  .formule-card.featured .formule-btn { color: #fff; border-color: #fff; }
+  .formule-card.featured .formule-btn:hover { background: #fff; color: var(--black); }
+
+  /* ========= CUSTOM AMOUNT ========= */
+  .custom-amount-wrap {
+    margin-top: 40px;
+    background: var(--white);
+    border-radius: 24px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .custom-label {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .custom-input-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 24px;
+    flex: 1;
+    min-width: 200px;
+    transition: border-color 0.2s;
+  }
+  .custom-input-wrap:focus-within { border-color: var(--accent); }
+  .currency-sym {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  .custom-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    outline: none;
+    width: 100%;
+  }
+  .custom-input::placeholder { color: rgba(17,17,17,0.2); }
+  .donate-custom-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    white-space: nowrap;
+  }
+  .donate-custom-btn:hover { transform: scale(1.03); box-shadow: var(--shadow-sm); }
+
+  /* ========= FOOTER ========= */
+  footer {
+    position: relative; z-index: 1;
+    background: var(--black);
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    padding: 40px;
+    font-size: 14px;
+  }
+  footer a { color: rgba(255,255,255,0.7); text-decoration: none; margin: 0 12px; }
+  footer a:hover { color: #fff; }
+
+  /* ========= MODAL ========= */
+  .modal-overlay {
+    display: none;
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: var(--overlay);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  .modal {
+    background: var(--white);
+    border-radius: 28px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+    position: relative;
+  }
+  .modal-header {
+    padding: 32px 36px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .modal-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .modal-subtitle { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .modal-close:hover { background: var(--border); }
+  .modal-body { padding: 28px 36px; }
+
+  /* Amount summary pill */
+  .amount-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg);
+    border-radius: 100px;
+    padding: 12px 24px;
+    margin-bottom: 28px;
+    width: 100%;
+  }
+  .amount-pill-label { font-size: 14px; color: var(--muted); }
+  .amount-pill-value {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--accent);
+    margin-left: auto;
+  }
+
+  /* Payment method selector */
+  .payment-methods {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .method-btn {
+    flex: 1;
+    min-width: 100px;
+    padding: 14px 12px;
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    background: var(--white);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .method-btn.active {
+    border-color: var(--accent);
+    background: var(--accent-muted);
+  }
+  .method-icon { font-size: 22px; display: block; margin-bottom: 6px; }
+  .method-name { font-size: 12px; font-weight: 600; color: var(--text); }
+
+  /* Form fields */
+  .form-group { margin-bottom: 20px; }
+  .form-label { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 8px; display: block; }
+  .form-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg);
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: var(--accent); background: var(--white); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* Bank info block */
+  .bank-info {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .bank-info-title { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .bank-line { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
+  .bank-line:last-child { border-bottom: none; }
+  .bank-line-label { font-size: 13px; color: var(--muted); }
+  .bank-line-value {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .copy-btn {
+    width: 26px; height: 26px;
+    border: none; background: var(--border);
+    border-radius: 8px; cursor: pointer;
+    font-size: 12px; display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  .copy-btn:hover { background: var(--accent); color: #fff; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-top: 8px;
+    box-shadow: var(--shadow-sm);
+  }
+  .submit-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+  .modal-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+
+  /* Success state */
+  .success-screen {
+    text-align: center;
+    padding: 60px 36px;
+  }
+  .success-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .success-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+  .success-sub { font-size: 16px; color: var(--muted); line-height: 1.6; }
+
+  /* ========= ADMIN ========= */
+  .admin-overlay {
+    display: none;
+    position: fixed; top:0; left:0; right:0; bottom:0;
+    background: #111;
+    z-index: 2000;
+    overflow-y: auto;
+  }
+  .admin-overlay.open { display: block; }
+  .admin-login {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  .admin-login-box {
+    background: #1A1A1A;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .admin-logo {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .admin-logo span { color: var(--accent); }
+  .admin-login-sub { color: rgba(255,255,255,0.4); font-size: 14px; margin-bottom: 36px; }
+  .admin-form-label { color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 600; display: block; margin-bottom: 8px; }
+  .admin-input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 15px;
+    font-family: var(--font-body);
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 16px;
+  }
+  .admin-input:focus { border-color: var(--accent); }
+  .admin-login-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    margin-top: 8px;
+  }
+  .admin-login-btn:hover { opacity: 0.9; }
+  .admin-error {
+    color: #ff6b6b;
+    font-size: 13px;
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* Admin dashboard */
+  .admin-dash { display: none; padding: 0; }
+  .admin-dash.open { display: block; }
+  .admin-topbar {
+    background: #1A1A1A;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 20px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .admin-topbar-logo {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .admin-topbar-logo span { color: var(--accent); }
+  .admin-exit-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    padding: 8px 20px;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .admin-exit-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .admin-content { max-width: 900px; margin: 0 auto; padding: 48px 40px; }
+  .admin-section {
+    background: #1A1A1A;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 24px;
+  }
+  .admin-section-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .admin-section-title .icon { font-size: 20px; }
+  .admin-field-label { color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+  .admin-field { margin-bottom: 20px; }
+  .admin-textarea {
+    width: 100%; padding: 12px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 14px;
+    font-family: var(--font-body);
+    outline: none;
+    resize: vertical;
+    min-height: 80px;
+    transition: border-color 0.2s;
+  }
+  .admin-textarea:focus { border-color: var(--accent); }
+
+  .formules-admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .formule-admin-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 20px;
+  }
+  .formule-admin-card.featured-card { border-color: var(--accent); background: var(--accent-muted); }
+  .fac-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .fac-title { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; }
+  .fac-featured-badge {
+    font-size: 10px; font-weight: 700;
+    background: var(--accent); color: #fff;
+    padding: 3px 8px; border-radius: 100px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  .admin-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .bank-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .save-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 100px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+    margin-top: 8px;
+  }
+  .save-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .save-success {
+    text-align: center;
+    color: var(--success);
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .color-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .color-swatch {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .color-swatch:hover, .color-swatch.active { transform: scale(1.15); border-color: #fff; }
+  .custom-color-input {
+    width: 48px; height: 36px;
+    padding: 0 4px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .font-pair-card {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .font-pair-card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.25); }
+  .font-pair-card.active { border-color: var(--accent); background: var(--accent-soft); }
+  .font-pair-title { font-size: 20px; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 4px; }
+  .font-pair-body { font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 8px; }
+  .font-pair-name { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.35); }
+
+  /* ========= ANIMATIONS ========= */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.03); }
+  }
+
+  /* ========= RESPONSIVE ========= */
+  @media (max-width: 600px) {
+    header { padding: 16px 20px; }
+    .hero { padding: 100px 20px 60px; }
+    .section { padding: 60px 20px; }
+    .stat-item { padding: 28px 16px; }
+    .stat-num { font-size: 28px; }
+    .modal-body, .modal-header { padding: 24px 20px; }
+    .formules-admin-grid, .admin-row, .bank-grid { grid-template-columns: 1fr; }
+    .admin-content { padding: 24px 20px; }
+    .admin-topbar { padding: 16px 20px; }
+    .custom-amount-wrap { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background shapes -->
+<div class="shapes">
+  <div class="shape s1"></div>
+  <div class="shape s2"></div>
+  <div class="shape s3"></div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo" id="siteLogo">Give<span>●</span></div>
+  <button class="header-btn" onclick="openAdmin()">Admin</button>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-tag" id="heroTag">🤝 Chaque geste compte</div>
+  <h1 id="heroTitle">Ensemble,<br>on <em>avance</em>.</h1>
+  <p class="hero-sub" id="heroSub">Votre soutien transforme des vies. Choisissez comment vous souhaitez contribuer, à votre rythme.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="scrollToFormules()">Faire un don →</button>
+    <button class="btn-secondary" onclick="scrollToFormules()">Voir les formules</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats" id="statsStrip">
+  <div class="stat-item"><span class="stat-num" id="stat1">1 247</span><div class="stat-label" id="statLabel1">Donateurs cette année</div></div>
+  <div class="stat-item"><span class="stat-num" id="stat2">43 000 €</span><div class="stat-label" id="statLabel2">Collectés au total</div></div>
+  <div class="stat-item"><span class="stat-num" id="stat3">98%</span><div class="stat-label" id="statLabel3">Reversés à la cause</div></div>
+</div>
+
+<!-- FORMULES -->
+<section class="section" id="formulesSection">
+  <div class="section-label">Nos formules</div>
+  <h2 class="section-title" id="formulesTitle">Choisissez<br>votre <em style="color:var(--accent);font-style:normal;">impact</em>.</h2>
+  <div class="formules-grid" id="formulesGrid">
+    <!-- dynamically rendered -->
+  </div>
+  <div class="custom-amount-wrap">
+    <div class="custom-label">Montant libre</div>
+    <div class="custom-input-wrap">
+      <span class="currency-sym" id="currencySymDisplay">€</span>
+      <input class="custom-input" type="number" id="customAmountInput" placeholder="50" min="1">
+    </div>
+    <button class="donate-custom-btn" onclick="openDonateModal()">Faire un don →</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="siteFooter">
+  <p id="footerText">© 2025 — Fabriqué avec ♥ pour une cause qui compte.</p>
+  <div style="margin-top:12px;">
+    <a href="#" onclick="openAdmin();return false;">Administration</a>
+  </div>
+</footer>
+
+<!-- DONATE MODAL -->
+<div class="modal-overlay" id="donateModal">
+  <div class="modal">
+    <div id="modalDonateContent">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Faire un don 💛</div>
+          <div class="modal-subtitle" id="modalSubtitle">Choisissez votre mode de paiement</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('donateModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="amount-pill">
+          <span class="amount-pill-label">Votre don</span>
+          <span class="amount-pill-value" id="modalAmount">—</span>
+        </div>
+
+        <div class="payment-methods">
+          <div class="method-btn active" onclick="selectMethod('bit')" id="method-bit">
+            <span class="method-icon">📱</span>
+            <div class="method-name">BIT</div>
+          </div>
+          <div class="method-btn" onclick="selectMethod('paybox')" id="method-paybox">
+            <span class="method-icon">💳</span>
+            <div class="method-name">Paybox</div>
+          </div>
+          <div class="method-btn" onclick="selectMethod('virement')" id="method-virement">
+            <span class="method-icon">🏦</span>
+            <div class="method-name">Virement</div>
+          </div>
+        </div>
+
+        <!-- BIT FORM -->
+        <div id="form-bit">
+          <div style="background:var(--bg);border-radius:16px;padding:20px 22px;margin-bottom:20px;">
+            <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Numéro BIT de l'association</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+              <div id="bit-number-display" style="font-family:var(--font-display);font-size:26px;font-weight:800;letter-spacing:1px;color:var(--text);">—</div>
+              <button class="copy-btn" style="width:36px;height:36px;font-size:16px;" onclick="copyBitNumber()">📋</button>
+            </div>
+            <div style="font-size:13px;color:var(--muted);margin-top:8px;">Montant à envoyer : <strong id="bit-amount-hint" style="color:var(--accent);">—</strong></div>
+          </div>
+          <button class="submit-btn" id="bit-open-app-btn" onclick="openBitApp()" style="margin-bottom:12px;">
+            📱 Ouvrir l'app BIT et payer
+          </button>
+          <p style="font-size:12px;color:var(--muted);text-align:center;line-height:1.6;">
+            Si l'app ne s'ouvre pas, copiez le numéro ci-dessus et effectuez le virement manuellement depuis votre app BIT.
+          </p>
+        </div>
+
+        <!-- PAYBOX FORM -->
+        <div id="form-paybox" style="display:none;">
+          <div style="background:var(--bg);border-radius:16px;padding:20px 22px;margin-bottom:20px;text-align:center;">
+            <div style="font-size:40px;margin-bottom:8px;">💳</div>
+            <div style="font-size:16px;font-weight:600;color:var(--text);margin-bottom:6px;">Paiement sécurisé via Paybox</div>
+            <div style="font-size:13px;color:var(--muted);line-height:1.6;">Vous allez être redirigé vers la page de paiement sécurisée Paybox pour régler <strong id="paybox-amount-hint" style="color:var(--accent);">—</strong>.</div>
+          </div>
+          <div id="paybox-no-url" style="display:none;background:#fff3cd;border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;color:#856404;">
+            ⚠️ Aucun lien Paybox configuré. Veuillez contacter l'administrateur.
+          </div>
+          <button class="submit-btn" id="paybox-go-btn" onclick="goToPaybox()">
+            Payer <span id="paybox-btn-amount">—</span> sur Paybox →
+          </button>
+          <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:12px;line-height:1.6;">🔒 Paiement 100% sécurisé — vous serez redirigé vers le serveur Paybox.</p>
+        </div>
+
+        <!-- VIREMENT FORM -->
+        <div id="form-virement" style="display:none;">
+          <p style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.6;">
+            Effectuez le virement depuis votre banque en indiquant votre nom en référence.
+          </p>
+          <div class="bank-info" id="bankInfoDisplay"></div>
+          <div class="form-group" style="margin-top:16px;">
+            <label class="form-label">Votre nom complet <span style="color:var(--accent);">*</span></label>
+            <input class="form-input" type="text" id="virement-name" placeholder="Prénom Nom" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email (pour confirmation)</label>
+            <input class="form-input" type="email" id="virement-email" placeholder="vous@email.com">
+          </div>
+          <div id="virement-name-error" style="display:none;color:#e53e3e;font-size:13px;margin:-12px 0 12px;padding-left:4px;">Merci d'indiquer votre nom.</div>
+          <button class="submit-btn" onclick="confirmVirement()">✅ J'ai effectué le virement</button>
+        </div>
+
+        <p class="modal-note">🔒 Vos données sont sécurisées et ne seront jamais partagées.</p>
+      </div>
+    </div>
+    <div id="modalSuccess" style="display:none;">
+      <div class="success-screen">
+        <span class="success-icon" id="successIcon">🎉</span>
+        <div class="success-title" id="successTitle">Merci infiniment !</div>
+        <p class="success-sub" id="successSub">Votre don fait une vraie différence.</p>
+        <button class="btn-primary" style="margin-top:32px;" onclick="closeModal('donateModal')">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN OVERLAY -->
+<div class="admin-overlay" id="adminOverlay">
+  <!-- Login -->
+  <div class="admin-login" id="adminLogin">
+    <div class="admin-login-box">
+      <div class="admin-logo">Give<span>●</span> Admin</div>
+      <div class="admin-login-sub">Accès réservé aux administrateurs</div>
+      <label class="admin-form-label">Code d'accès</label>
+      <input class="admin-input" type="password" id="adminCodeInput" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkAdmin()">
+      <button class="admin-login-btn" onclick="checkAdmin()">Accéder →</button>
+      <div class="admin-error" id="adminError">Code incorrect. Réessayez.</div>
+      <div style="margin-top:24px;text-align:center;">
+        <button onclick="closeAdmin()" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:13px;">← Retour au site</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="admin-dash" id="adminDash">
+    <div class="admin-topbar">
+      <div class="admin-topbar-logo">Give<span>●</span> Admin</div>
+      <button class="admin-exit-btn" onclick="closeAdmin()">← Quitter</button>
+    </div>
+    <div class="admin-content">
+
+      <!-- Infos générales -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">✏️</span> Informations générales</div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label class="admin-field-label">Nom du site / Logo</label>
+            <input class="admin-input" type="text" id="a_siteName" placeholder="Give●" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Tag hero (bandeau)</label>
+            <input class="admin-input" type="text" id="a_heroTag" placeholder="🤝 Chaque geste compte" style="margin-bottom:0;">
+          </div>
+        </div>
+        <div class="admin-field">
+          <label class="admin-field-label">Titre principal (hero)</label>
+          <input class="admin-input" type="text" id="a_heroTitle" placeholder="Ensemble, on avance." style="margin-bottom:0;">
+        </div>
+        <div class="admin-field" style="margin-top:16px;">
+          <label class="admin-field-label">Sous-titre hero</label>
+          <textarea class="admin-textarea" id="a_heroSub" placeholder="Votre soutien transforme des vies..."></textarea>
+        </div>
+        <div class="admin-field">
+          <label class="admin-field-label">Titre section formules</label>
+          <input class="admin-input" type="text" id="a_formulesTitle" placeholder="Choisissez votre impact." style="margin-bottom:0;">
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">📊</span> Chiffres clés (bandeau)</div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label class="admin-field-label">Stat 1 — Valeur</label>
+            <input class="admin-input" type="text" id="a_stat1" placeholder="1 247" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Stat 1 — Label</label>
+            <input class="admin-input" type="text" id="a_statLabel1" placeholder="Donateurs cette année" style="margin-bottom:0;">
+          </div>
+        </div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label class="admin-field-label">Stat 2 — Valeur</label>
+            <input class="admin-input" type="text" id="a_stat2" placeholder="43 000 €" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Stat 2 — Label</label>
+            <input class="admin-input" type="text" id="a_statLabel2" placeholder="Collectés au total" style="margin-bottom:0;">
+          </div>
+        </div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label class="admin-field-label">Stat 3 — Valeur</label>
+            <input class="admin-input" type="text" id="a_stat3" placeholder="98%" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Stat 3 — Label</label>
+            <input class="admin-input" type="text" id="a_statLabel3" placeholder="Reversés à la cause" style="margin-bottom:0;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Formules -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">💰</span> Formules de don</div>
+        <div class="formules-admin-grid">
+          <div class="formule-admin-card">
+            <div class="fac-header"><span class="fac-title">Formule 1</span></div>
+            <div class="admin-field"><label class="admin-field-label">Icône</label><input class="admin-input" type="text" id="f1_icon" placeholder="🌱" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Nom</label><input class="admin-input" type="text" id="f1_name" placeholder="Graine" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Prix (€)</label><input class="admin-input" type="number" id="f1_price" placeholder="10" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Description</label><input class="admin-input" type="text" id="f1_desc" placeholder="Un premier geste symbolique" style="margin-bottom:0;"></div>
+          </div>
+          <div class="formule-admin-card featured-card">
+            <div class="fac-header"><span class="fac-title">Formule 2</span><span class="fac-featured-badge">Populaire</span></div>
+            <div class="admin-field"><label class="admin-field-label">Icône</label><input class="admin-input" type="text" id="f2_icon" placeholder="⭐" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Nom</label><input class="admin-input" type="text" id="f2_name" placeholder="Soutien" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Prix (€)</label><input class="admin-input" type="number" id="f2_price" placeholder="36" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Description</label><input class="admin-input" type="text" id="f2_desc" placeholder="Le choix le plus populaire" style="margin-bottom:0;"></div>
+          </div>
+          <div class="formule-admin-card">
+            <div class="fac-header"><span class="fac-title">Formule 3</span></div>
+            <div class="admin-field"><label class="admin-field-label">Icône</label><input class="admin-input" type="text" id="f3_icon" placeholder="🚀" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Nom</label><input class="admin-input" type="text" id="f3_name" placeholder="Champion" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Prix (€)</label><input class="admin-input" type="number" id="f3_price" placeholder="100" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Description</label><input class="admin-input" type="text" id="f3_desc" placeholder="Impact maximum" style="margin-bottom:0;"></div>
+          </div>
+          <div class="formule-admin-card">
+            <div class="fac-header"><span class="fac-title">Formule 4</span></div>
+            <div class="admin-field"><label class="admin-field-label">Icône</label><input class="admin-input" type="text" id="f4_icon" placeholder="💎" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Nom</label><input class="admin-input" type="text" id="f4_name" placeholder="Mécène" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Prix (€)</label><input class="admin-input" type="number" id="f4_price" placeholder="360" style="margin-bottom:0;"></div>
+            <div class="admin-field" style="margin-top:12px;"><label class="admin-field-label">Description</label><input class="admin-input" type="text" id="f4_desc" placeholder="Devenez un pilier" style="margin-bottom:0;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paiement -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">💱</span> Devise</div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label class="admin-field-label">Symbole affiché (€, $, ₪, £…)</label>
+            <input class="admin-input" type="text" id="a_currency" placeholder="€" maxlength="4" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Code ISO (EUR, USD, ILS…)</label>
+            <input class="admin-input" type="text" id="a_currencyCode" placeholder="EUR" maxlength="4" style="margin-bottom:0;">
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <button type="button" onclick="quickCurrency('€','EUR')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;cursor:pointer;font-size:13px;">€ EUR</button>
+          <button type="button" onclick="quickCurrency('$','USD')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;cursor:pointer;font-size:13px;">$ USD</button>
+          <button type="button" onclick="quickCurrency('₪','ILS')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;cursor:pointer;font-size:13px;">₪ ILS</button>
+          <button type="button" onclick="quickCurrency('£','GBP')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;cursor:pointer;font-size:13px;">£ GBP</button>
+          <button type="button" onclick="quickCurrency('CHF','CHF')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;cursor:pointer;font-size:13px;">CHF</button>
+          <button type="button" onclick="quickCurrency('CA$','CAD')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#fff;padding:6px 14px;border-radius:100px;cursor:pointer;font-size:13px;">CA$</button>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">🌍</span> Coordonnées bancaires — International (IBAN/BIC)</div>
+        <div class="bank-grid">
+          <div class="admin-field">
+            <label class="admin-field-label">Titulaire du compte</label>
+            <input class="admin-input" type="text" id="a_bankName" placeholder="Association Give Together" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Nom de la banque</label>
+            <input class="admin-input" type="text" id="a_bankLabel" placeholder="BNP Paribas" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">IBAN</label>
+            <input class="admin-input" type="text" id="a_iban" placeholder="FR76 3000 6000 0112 3456 7890 189" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">BIC / SWIFT</label>
+            <input class="admin-input" type="text" id="a_bic" placeholder="BNPAFRPPXXX" style="margin-bottom:0;">
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">🇮🇱</span> Coordonnées bancaires — Israël</div>
+        <div class="bank-grid">
+          <div class="admin-field">
+            <label class="admin-field-label">Titulaire du compte</label>
+            <input class="admin-input" type="text" id="a_ilAccountHolder" placeholder="שם בעל החשבון" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Nom de la banque</label>
+            <input class="admin-input" type="text" id="a_ilBankName" placeholder="Bank Leumi / Hapoalim…" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Numéro de compte (מספר חשבון)</label>
+            <input class="admin-input" type="text" id="a_ilAccountNumber" placeholder="123456789" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Numéro de snif / agence (סניף)</label>
+            <input class="admin-input" type="text" id="a_ilSnif" placeholder="123" style="margin-bottom:0;">
+          </div>
+        </div>
+        <p style="color:rgba(255,255,255,0.35);font-size:12px;margin-top:12px;">Laissez vide si non applicable — les champs vides ne s'affichent pas dans la modal.</p>
+      </div>
+
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">📲</span> Paiements en ligne</div>
+        <div class="admin-row">
+          <div class="admin-field">
+            <label class="admin-field-label">Numéro BIT</label>
+            <input class="admin-input" type="text" id="a_bit" placeholder="05X-XXXXXXX" style="margin-bottom:0;">
+          </div>
+          <div class="admin-field">
+            <label class="admin-field-label">Lien Paybox (URL de base)</label>
+            <input class="admin-input" type="text" id="a_payboxUrl" placeholder="https://www.paybox.com/paiement/..." style="margin-bottom:6px;">
+            <p style="font-size:11px;color:rgba(255,255,255,0.3);line-height:1.5;">Les paramètres <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;">PBX_TOTAL</code> (montant en centimes) et <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;">PBX_DEVISE</code> (code ISO numérique) seront ajoutés automatiquement selon le montant choisi.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Historique virements -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">📋</span> Virements déclarés</div>
+        <div id="donationsList"></div>
+        <button type="button" onclick="clearDonations()" style="background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.4);padding:8px 18px;border-radius:100px;cursor:pointer;font-size:12px;margin-top:12px;">🗑 Effacer l'historique</button>
+      </div>
+
+      <!-- Design -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">🎨</span> Design — Couleurs & Polices</div>
+
+        <div class="admin-field-label" style="margin-bottom:12px;">Couleur principale (accent)</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:24px;">
+          <div class="color-swatch" style="background:#FF4D2E;" data-color="#FF4D2E" onclick="pickAccent('#FF4D2E',this)" title="Corail"></div>
+          <div class="color-swatch" style="background:#6C63FF;" data-color="#6C63FF" onclick="pickAccent('#6C63FF',this)" title="Violet"></div>
+          <div class="color-swatch" style="background:#00C896;" data-color="#00C896" onclick="pickAccent('#00C896',this)" title="Menthe"></div>
+          <div class="color-swatch" style="background:#F59E0B;" data-color="#F59E0B" onclick="pickAccent('#F59E0B',this)" title="Ambre"></div>
+          <div class="color-swatch" style="background:#EC4899;" data-color="#EC4899" onclick="pickAccent('#EC4899',this)" title="Rose"></div>
+          <div class="color-swatch" style="background:#3B82F6;" data-color="#3B82F6" onclick="pickAccent('#3B82F6',this)" title="Bleu"></div>
+          <div class="color-swatch" style="background:#10B981;" data-color="#10B981" onclick="pickAccent('#10B981',this)" title="Vert"></div>
+          <div class="color-swatch" style="background:#F43F5E;" data-color="#F43F5E" onclick="pickAccent('#F43F5E',this)" title="Rouge vif"></div>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="color" id="a_accentCustom" class="custom-color-input" value="#FF4D2E" oninput="pickAccent(this.value,null)">
+            <span style="color:rgba(255,255,255,0.5);font-size:12px;">Personnalisé</span>
+          </label>
+        </div>
+
+        <div class="admin-field-label" style="margin-bottom:12px;">Couleur de fond</div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:24px;">
+          <div class="color-swatch" style="background:#F5F2EC;border:1px solid rgba(255,255,255,0.2);" data-bg="#F5F2EC" onclick="pickBg('#F5F2EC','#111111',this)" title="Crème (défaut)"></div>
+          <div class="color-swatch" style="background:#FFFFFF;border:1px solid rgba(255,255,255,0.2);" data-bg="#FFFFFF" onclick="pickBg('#FFFFFF','#111111',this)" title="Blanc"></div>
+          <div class="color-swatch" style="background:#0F0F0F;" data-bg="#0F0F0F" onclick="pickBg('#0F0F0F','#FFFFFF',this)" title="Noir"></div>
+          <div class="color-swatch" style="background:#1A1A2E;" data-bg="#1A1A2E" onclick="pickBg('#1A1A2E','#FFFFFF',this)" title="Nuit"></div>
+          <div class="color-swatch" style="background:#F0F4FF;" data-bg="#F0F4FF" onclick="pickBg('#F0F4FF','#111111',this)" title="Ciel pâle"></div>
+          <div class="color-swatch" style="background:#FFF9F0;" data-bg="#FFF9F0" onclick="pickBg('#FFF9F0','#111111',this)" title="Pêche douce"></div>
+          <div class="color-swatch" style="background:#F0FFF4;" data-bg="#F0FFF4" onclick="pickBg('#F0FFF4','#111111',this)" title="Menthe glacée"></div>
+          <div class="color-swatch" style="background:#1E1B4B;" data-bg="#1E1B4B" onclick="pickBg('#1E1B4B','#FFFFFF',this)" title="Indigo profond"></div>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+            <input type="color" id="a_bgCustom" class="custom-color-input" value="#F5F2EC" oninput="pickBg(this.value,null,null)">
+            <span style="color:rgba(255,255,255,0.5);font-size:12px;">Personnalisé</span>
+          </label>
+        </div>
+
+        <div class="admin-field-label" style="margin-bottom:12px;">Combinaison de polices</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="fontPairsGrid">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Code admin -->
+      <div class="admin-section">
+        <div class="admin-section-title"><span class="icon">🔑</span> Sécurité</div>
+        <div class="admin-field">
+          <label class="admin-field-label">Code admin (actuel : ne pas afficher)</label>
+          <input class="admin-input" type="password" id="a_newCode" placeholder="Nouveau code admin" style="margin-bottom:0;">
+        </div>
+      </div>
+
+      <button class="save-btn" onclick="saveSettings()">💾 Enregistrer toutes les modifications</button>
+      <div class="save-success" id="saveSuccess">✅ Modifications enregistrées avec succès !</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========= UTILS =========
+function hexToRgb(hex) {
+  const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return r ? { r: parseInt(r[1],16), g: parseInt(r[2],16), b: parseInt(r[3],16) } : null;
+}
+
+// ========= FONT PAIRS =========
+const FONT_PAIRS = [
+  { id:'syne-jakarta',  display:"'Syne', sans-serif",            body:"'Plus Jakarta Sans', sans-serif",   label:'Syne + Jakarta', preview:'Syne',         previewBody:'Plus Jakarta Sans' },
+  { id:'outfit',        display:"'Outfit', sans-serif",           body:"'Outfit', sans-serif",              label:'Outfit (tout)',  preview:'Outfit',        previewBody:'Outfit' },
+  { id:'playfair-dm',   display:"'Playfair Display', serif",      body:"'DM Sans', sans-serif",             label:'Playfair + DM',  preview:'Playfair Display', previewBody:'DM Sans' },
+  { id:'unbounded',     display:"'Unbounded', sans-serif",        body:"'Lexend', sans-serif",              label:'Unbounded + Lexend', preview:'Unbounded', previewBody:'Lexend' },
+  { id:'righteous',     display:"'Righteous', cursive",           body:"'DM Sans', sans-serif",             label:'Righteous + DM', preview:'Righteous',    previewBody:'DM Sans' },
+  { id:'dm-serif',      display:"'DM Serif Display', serif",      body:"'DM Sans', sans-serif",             label:'DM Serif + DM',  preview:'DM Serif Display', previewBody:'DM Sans' },
+  { id:'space',         display:"'Space Grotesk', sans-serif",    body:"'Space Grotesk', sans-serif",       label:'Space Grotesk',  preview:'Space Grotesk', previewBody:'Space Grotesk' },
+  { id:'lexend',        display:"'Lexend', sans-serif",           body:"'Lexend', sans-serif",              label:'Lexend (tout)',  preview:'Lexend',        previewBody:'Lexend' },
+];
+
+// ========= DEFAULT CONFIG =========
+const DEFAULT = {
+  siteName: 'Give●',
+  heroTag: '🤝 Chaque geste compte',
+  heroTitle: 'Ensemble, on avance.',
+  heroSub: 'Votre soutien transforme des vies. Choisissez comment vous souhaitez contribuer, à votre rythme.',
+  formulesTitle: 'Choisissez votre impact.',
+  stat1:'1 247', statLabel1:'Donateurs cette année',
+  stat2:'43 000 €', statLabel2:'Collectés au total',
+  stat3:'98%', statLabel3:'Reversés à la cause',
+  formules:[
+    {icon:'🌱', name:'Graine', price:10, desc:'Un premier geste symbolique qui change tout.'},
+    {icon:'⭐', name:'Soutien', price:36, desc:'Le choix le plus populaire de nos donateurs.', featured:true},
+    {icon:'🚀', name:'Champion', price:100, desc:'Un impact fort et concret sur le terrain.'},
+    {icon:'💎', name:'Mécène', price:360, desc:'Devenez un pilier de notre mission.'},
+  ],
+  bankName:'Association Give Together',
+  iban:'FR76 3000 6000 0112 3456 7890 189',
+  bic:'BNPAFRPPXXX',
+  bankLabel:'BNP Paribas',
+  bit:'05X-XXXXXXX',
+  payboxUrl:'https://secure.paybox.com/...',
+  // Israeli bank fields
+  ilAccountNumber:'',
+  ilBankName:'',
+  ilSnif:'',
+  ilAccountHolder:'',
+  currency:'€',
+  currencyCode:'EUR',
+  adminCode:'admin2025',
+  accentColor:'#FF4D2E',
+  bgColor:'#F5F2EC',
+  textColor:'#111111',
+  fontPair:'syne-jakarta',
+};
+
+// ========= STATE =========
+let config = JSON.parse(localStorage.getItem('donationConfig') || 'null') || {...DEFAULT};
+let currentAmount = 0;
+let currentMethod = 'bit';
+
+// ========= RENDER SITE =========
+function renderSite() {
+  document.getElementById('siteLogo').innerHTML = config.siteName.replace('●','<span>●</span>');
+  document.getElementById('heroTag').textContent = config.heroTag;
+  document.getElementById('heroTitle').innerHTML = config.heroTitle.replace(/\n/g,'<br>').replace(/([a-zA-ZÀ-ÿ]+)\s*$/, m => `<em style="color:var(--accent);font-style:normal;">${m}</em>`);
+  document.getElementById('heroSub').textContent = config.heroSub;
+  document.getElementById('formulesTitle').innerHTML = config.formulesTitle.replace(/([a-zA-ZÀ-ÿ]+)\s*$/, m => `<em style="color:var(--accent);font-style:normal;">${m}</em>`);
+  document.getElementById('stat1').textContent = config.stat1;
+  document.getElementById('statLabel1').textContent = config.statLabel1;
+  document.getElementById('stat2').textContent = config.stat2;
+  document.getElementById('statLabel2').textContent = config.statLabel2;
+  document.getElementById('stat3').textContent = config.stat3;
+  document.getElementById('statLabel3').textContent = config.statLabel3;
+  renderFormules();
+  renderBankInfo();
+  const r = document.documentElement;
+  const accent = config.accentColor || DEFAULT.accentColor;
+  r.style.setProperty('--accent', accent);
+  // Convert hex to RGB for shadow variables
+  const rgb = hexToRgb(accent);
+  if(rgb) r.style.setProperty('--accent-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
+  const bg = config.bgColor || DEFAULT.bgColor;
+  const tx = config.textColor || DEFAULT.textColor;
+  r.style.setProperty('--bg', bg);
+  r.style.setProperty('--input-bg', bg);
+  r.style.setProperty('--text', tx);
+  r.style.setProperty('--black', tx);
+  r.style.setProperty('--border', tx === '#FFFFFF' ? 'rgba(255,255,255,0.15)' : 'rgba(17,17,17,0.1)');
+  r.style.setProperty('--muted', tx === '#FFFFFF' ? 'rgba(255,255,255,0.55)' : '#6B6B6B');
+  const pair = FONT_PAIRS.find(p=>p.id===config.fontPair) || FONT_PAIRS[0];
+  r.style.setProperty('--font-display', pair.display);
+  r.style.setProperty('--font-body', pair.body);
+  // Currency symbol
+  const sym = document.getElementById('currencySymDisplay');
+  if(sym) sym.textContent = config.currency || DEFAULT.currency;
+}
+
+function renderFormules() {
+  const grid = document.getElementById('formulesGrid');
+  const sym = config.currency || DEFAULT.currency;
+  grid.innerHTML = '';
+  config.formules.forEach((f, i) => {
+    const div = document.createElement('div');
+    div.className = 'formule-card' + (f.featured ? ' featured' : '');
+    div.innerHTML = `
+      ${f.featured ? '<span class="formule-badge">Plus populaire ⭐</span>' : ''}
+      <div class="formule-icon">${f.icon}</div>
+      <div class="formule-price"><sup>${sym}</sup>${f.price}</div>
+      <div class="formule-name">${f.name}</div>
+      <div class="formule-desc">${f.desc}</div>
+      <button class="formule-btn" onclick="openDonateModalWithAmount(${f.price})">Donner ${f.price} ${sym}</button>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function renderBankInfo() {
+  const el = document.getElementById('bankInfoDisplay');
+  if(!el) return;
+  const sym = config.currency || DEFAULT.currency;
+  const hasIntl = config.iban || config.bic;
+  const hasIL = config.ilAccountNumber || config.ilSnif;
+  let html = '';
+  if(hasIntl) {
+    html += `<div class="bank-info-title">🌍 Virement international</div>`;
+    if(config.bankName) html += `<div class="bank-line"><span class="bank-line-label">Bénéficiaire</span><span class="bank-line-value">${config.bankName}</span></div>`;
+    if(config.bankLabel) html += `<div class="bank-line"><span class="bank-line-label">Banque</span><span class="bank-line-value">${config.bankLabel}</span></div>`;
+    if(config.iban) html += `<div class="bank-line"><span class="bank-line-label">IBAN</span><span class="bank-line-value" style="font-size:12px;">${config.iban} <button class="copy-btn" onclick="copyText('${config.iban}')">📋</button></span></div>`;
+    if(config.bic) html += `<div class="bank-line"><span class="bank-line-label">BIC/SWIFT</span><span class="bank-line-value">${config.bic} <button class="copy-btn" onclick="copyText('${config.bic}')">📋</button></span></div>`;
+  }
+  if(hasIL) {
+    if(hasIntl) html += `<div style="height:12px;"></div>`;
+    html += `<div class="bank-info-title">🇮🇱 העברה בנקאית — Virement israélien</div>`;
+    if(config.ilAccountHolder) html += `<div class="bank-line"><span class="bank-line-label">בעל החשבון</span><span class="bank-line-value">${config.ilAccountHolder}</span></div>`;
+    if(config.ilBankName) html += `<div class="bank-line"><span class="bank-line-label">שם הבנק</span><span class="bank-line-value">${config.ilBankName}</span></div>`;
+    if(config.ilSnif) html += `<div class="bank-line"><span class="bank-line-label">סניף / Agence</span><span class="bank-line-value">${config.ilSnif} <button class="copy-btn" onclick="copyText('${config.ilSnif}')">📋</button></span></div>`;
+    if(config.ilAccountNumber) html += `<div class="bank-line"><span class="bank-line-label">מספר חשבון</span><span class="bank-line-value">${config.ilAccountNumber} <button class="copy-btn" onclick="copyText('${config.ilAccountNumber}')">📋</button></span></div>`;
+  }
+  if(!hasIntl && !hasIL) {
+    html = `<div class="bank-info-title" style="color:var(--muted)">Aucune coordonnée configurée</div>`;
+  }
+  el.innerHTML = html;
+}
+
+function copyText(t) {
+  navigator.clipboard.writeText(t).then(()=>{
+    // flash feedback
+    const btn = event.target;
+    btn.textContent = '✅';
+    setTimeout(()=>btn.textContent='📋', 1200);
+  });
+}
+
+// ========= SCROLL =========
+function scrollToFormules() {
+  document.getElementById('formulesSection').scrollIntoView({behavior:'smooth'});
+}
+
+// ========= DONATE MODAL =========
+function openDonateModalWithAmount(amount) {
+  currentAmount = amount;
+  showDonateModal();
+}
+function openDonateModal() {
+  const val = parseFloat(document.getElementById('customAmountInput').value);
+  if(!val || val < 1) { document.getElementById('customAmountInput').focus(); return; }
+  currentAmount = val;
+  showDonateModal();
+}
+function showDonateModal() {
+  const sym = config.currency || DEFAULT.currency;
+  document.getElementById('modalAmount').textContent = currentAmount + ' ' + sym;
+  document.getElementById('modalDonateContent').style.display = '';
+  document.getElementById('modalSuccess').style.display = 'none';
+  selectMethod('bit');
+  document.getElementById('donateModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('donateModal').addEventListener('click', e => {
+  if(e.target === document.getElementById('donateModal')) closeModal('donateModal');
+});
+
+function selectMethod(m) {
+  currentMethod = m;
+  const sym = config.currency || DEFAULT.currency;
+  ['bit','paybox','virement'].forEach(x => {
+    document.getElementById('method-'+x).classList.toggle('active', x===m);
+    document.getElementById('form-'+x).style.display = x===m ? '' : 'none';
+  });
+
+  if(m === 'bit') {
+    document.getElementById('modalSubtitle').textContent = 'Paiement via BIT';
+    const bitNum = config.bit || DEFAULT.bit;
+    document.getElementById('bit-number-display').textContent = bitNum;
+    document.getElementById('bit-amount-hint').textContent = currentAmount + ' ' + sym;
+  }
+  if(m === 'paybox') {
+    document.getElementById('modalSubtitle').textContent = 'Paiement sécurisé Paybox';
+    const hasUrl = config.payboxUrl && config.payboxUrl.startsWith('http');
+    document.getElementById('paybox-no-url').style.display = hasUrl ? 'none' : 'block';
+    document.getElementById('paybox-go-btn').style.display = hasUrl ? 'block' : 'none';
+    document.getElementById('paybox-amount-hint').textContent = currentAmount + ' ' + sym;
+    document.getElementById('paybox-btn-amount').textContent = currentAmount + ' ' + sym;
+  }
+  if(m === 'virement') {
+    document.getElementById('modalSubtitle').textContent = 'Virement bancaire';
+    renderBankInfo();
+  }
+}
+
+// ========= BIT =========
+function copyBitNumber() {
+  const num = config.bit || DEFAULT.bit;
+  navigator.clipboard.writeText(num).then(() => {
+    const btn = event.target;
+    btn.textContent = '✅';
+    setTimeout(() => btn.textContent = '📋', 1500);
+  });
+}
+function openBitApp() {
+  const num = (config.bit || DEFAULT.bit).replace(/[-\s]/g, '');
+  const sym = config.currency || DEFAULT.currency;
+  // BIT deeplink: bit://pay?phone=05XXXXXXXX&amount=XX
+  const deeplink = `bit://pay?phone=${encodeURIComponent(num)}&amount=${currentAmount}`;
+  // Fallback: universal link via bit.dev.il (if deeplink fails)
+  const fallback = `https://www.bitpay.co.il/app/pay?phone=${encodeURIComponent(num)}&amount=${currentAmount}`;
+  // Try deeplink first, fallback after 1.5s if no app
+  const start = Date.now();
+  window.location = deeplink;
+  setTimeout(() => {
+    if(Date.now() - start < 2000) window.open(fallback, '_blank');
+  }, 1500);
+}
+
+// ========= PAYBOX =========
+function goToPaybox() {
+  const baseUrl = config.payboxUrl || DEFAULT.payboxUrl;
+  if(!baseUrl || !baseUrl.startsWith('http')) return;
+  const sym = config.currency || DEFAULT.currency;
+  const code = config.currencyCode || DEFAULT.currencyCode;
+  // Append amount + currency params — Paybox standard params
+  const url = new URL(baseUrl);
+  url.searchParams.set('PBX_TOTAL', Math.round(currentAmount * 100)); // Paybox expects cents
+  url.searchParams.set('PBX_DEVISE', getCurrencyNumericCode(code));
+  window.open(url.toString(), '_blank');
+}
+function getCurrencyNumericCode(code) {
+  const map = { EUR:'978', USD:'840', ILS:'376', GBP:'826', CHF:'756', CAD:'124' };
+  return map[code] || '978';
+}
+
+// ========= VIREMENT =========
+function confirmVirement() {
+  const nameEl = document.getElementById('virement-name');
+  const errEl = document.getElementById('virement-name-error');
+  if(!nameEl.value.trim()) {
+    errEl.style.display = 'block';
+    nameEl.focus();
+    return;
+  }
+  errEl.style.display = 'none';
+  // Save to localStorage
+  const sym = config.currency || DEFAULT.currency;
+  const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+  donations.push({
+    date: new Date().toISOString(),
+    name: nameEl.value.trim(),
+    email: document.getElementById('virement-email').value.trim(),
+    amount: currentAmount,
+    currency: sym,
+    method: 'virement'
+  });
+  localStorage.setItem('donations', JSON.stringify(donations));
+  // Show success
+  showSuccessScreen('virement', nameEl.value.trim());
+}
+
+function showSuccessScreen(method, name) {
+  const sym = config.currency || DEFAULT.currency;
+  document.getElementById('modalDonateContent').style.display = 'none';
+  document.getElementById('modalSuccess').style.display = '';
+  if(method === 'virement') {
+    document.getElementById('successIcon').textContent = '🏦';
+    document.getElementById('successTitle').textContent = 'Virement enregistré !';
+    document.getElementById('successSub').innerHTML = `Merci <strong>${name}</strong> pour votre don de <strong>${currentAmount} ${sym}</strong>.<br>Dès réception du virement, nous vous confirmerons votre contribution.`;
+  } else {
+    document.getElementById('successIcon').textContent = '🎉';
+    document.getElementById('successTitle').textContent = 'Merci infiniment !';
+    document.getElementById('successSub').innerHTML = `Votre don de <strong>${currentAmount} ${sym}</strong> fait une vraie différence.`;
+  }
+}
+
+// ========= ADMIN =========
+function openAdmin() {
+  document.getElementById('adminOverlay').classList.add('open');
+  document.getElementById('adminLogin').style.display = 'flex';
+  document.getElementById('adminDash').classList.remove('open');
+  document.getElementById('adminCodeInput').value = '';
+  document.getElementById('adminError').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+}
+function closeAdmin() {
+  document.getElementById('adminOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function checkAdmin() {
+  const code = document.getElementById('adminCodeInput').value;
+  if(code === config.adminCode) {
+    document.getElementById('adminLogin').style.display = 'none';
+    document.getElementById('adminDash').classList.add('open');
+    populateAdminFields();
+    renderDonationsList();
+  } else {
+    document.getElementById('adminError').style.display = 'block';
+    document.getElementById('adminCodeInput').value = '';
+    document.getElementById('adminCodeInput').focus();
+  }
+}
+function populateAdminFields() {
+  document.getElementById('a_siteName').value = config.siteName || '';
+  document.getElementById('a_heroTag').value = config.heroTag || '';
+  document.getElementById('a_heroTitle').value = config.heroTitle || '';
+  document.getElementById('a_heroSub').value = config.heroSub || '';
+  document.getElementById('a_formulesTitle').value = config.formulesTitle || '';
+  document.getElementById('a_stat1').value = config.stat1 || '';
+  document.getElementById('a_statLabel1').value = config.statLabel1 || '';
+  document.getElementById('a_stat2').value = config.stat2 || '';
+  document.getElementById('a_statLabel2').value = config.statLabel2 || '';
+  document.getElementById('a_stat3').value = config.stat3 || '';
+  document.getElementById('a_statLabel3').value = config.statLabel3 || '';
+  config.formules.forEach((f,i)=>{
+    const n = i+1;
+    document.getElementById(`f${n}_icon`).value = f.icon||'';
+    document.getElementById(`f${n}_name`).value = f.name||'';
+    document.getElementById(`f${n}_price`).value = f.price||'';
+    document.getElementById(`f${n}_desc`).value = f.desc||'';
+  });
+  document.getElementById('a_bankName').value = config.bankName||'';
+  document.getElementById('a_iban').value = config.iban||'';
+  document.getElementById('a_bic').value = config.bic||'';
+  document.getElementById('a_bankLabel').value = config.bankLabel||'';
+  document.getElementById('a_bit').value = config.bit||'';
+  document.getElementById('a_payboxUrl').value = config.payboxUrl||'';
+  document.getElementById('a_currency').value = config.currency || DEFAULT.currency;
+  document.getElementById('a_currencyCode').value = config.currencyCode || DEFAULT.currencyCode;
+  document.getElementById('a_ilAccountHolder').value = config.ilAccountHolder||'';
+  document.getElementById('a_ilBankName').value = config.ilBankName||'';
+  document.getElementById('a_ilAccountNumber').value = config.ilAccountNumber||'';
+  document.getElementById('a_ilSnif').value = config.ilSnif||'';
+  // Design
+  document.getElementById('a_accentCustom').value = config.accentColor || DEFAULT.accentColor;
+  document.getElementById('a_bgCustom').value = config.bgColor || DEFAULT.bgColor;
+  markActiveSwatch('[data-color]', config.accentColor);
+  markActiveSwatch('[data-bg]', config.bgColor);
+  renderFontPairs();
+}
+
+function saveSettings() {
+  config.siteName = document.getElementById('a_siteName').value || config.siteName;
+  config.heroTag = document.getElementById('a_heroTag').value || config.heroTag;
+  config.heroTitle = document.getElementById('a_heroTitle').value || config.heroTitle;
+  config.heroSub = document.getElementById('a_heroSub').value || config.heroSub;
+  config.formulesTitle = document.getElementById('a_formulesTitle').value || config.formulesTitle;
+  config.stat1 = document.getElementById('a_stat1').value || config.stat1;
+  config.statLabel1 = document.getElementById('a_statLabel1').value;
+  config.stat2 = document.getElementById('a_stat2').value || config.stat2;
+  config.statLabel2 = document.getElementById('a_statLabel2').value;
+  config.stat3 = document.getElementById('a_stat3').value || config.stat3;
+  config.statLabel3 = document.getElementById('a_statLabel3').value;
+  [1,2,3,4].forEach(n=>{
+    config.formules[n-1].icon = document.getElementById(`f${n}_icon`).value || config.formules[n-1].icon;
+    config.formules[n-1].name = document.getElementById(`f${n}_name`).value || config.formules[n-1].name;
+    config.formules[n-1].price = parseFloat(document.getElementById(`f${n}_price`).value) || config.formules[n-1].price;
+    config.formules[n-1].desc = document.getElementById(`f${n}_desc`).value || config.formules[n-1].desc;
+  });
+  config.bankName = document.getElementById('a_bankName').value || config.bankName;
+  config.iban = document.getElementById('a_iban').value;
+  config.bic = document.getElementById('a_bic').value;
+  config.bankLabel = document.getElementById('a_bankLabel').value;
+  config.bit = document.getElementById('a_bit').value;
+  config.payboxUrl = document.getElementById('a_payboxUrl').value;
+  config.currency = document.getElementById('a_currency').value || config.currency;
+  config.currencyCode = document.getElementById('a_currencyCode').value || config.currencyCode;
+  config.ilAccountHolder = document.getElementById('a_ilAccountHolder').value;
+  config.ilBankName = document.getElementById('a_ilBankName').value;
+  config.ilAccountNumber = document.getElementById('a_ilAccountNumber').value;
+  config.ilSnif = document.getElementById('a_ilSnif').value;
+  const newCode = document.getElementById('a_newCode').value;
+  if(newCode) config.adminCode = newCode;
+  // Design already saved live via pickAccent/pickBg/pickFont
+  localStorage.setItem('donationConfig', JSON.stringify(config));
+  renderSite();
+  const s = document.getElementById('saveSuccess');
+  s.style.display = 'block';
+  setTimeout(()=>s.style.display='none', 3000);
+}
+
+// ========= DESIGN HELPERS =========
+function pickAccent(color, swatchEl) {
+  config.accentColor = color;
+  document.documentElement.style.setProperty('--accent', color);
+  const rgb = hexToRgb(color);
+  if(rgb) document.documentElement.style.setProperty('--accent-rgb', `${rgb.r},${rgb.g},${rgb.b}`);
+  document.getElementById('a_accentCustom').value = color;
+  markActiveSwatch('[data-color]', color);
+}
+function pickBg(bg, tx, swatchEl) {
+  config.bgColor = bg;
+  if(tx) config.textColor = tx;
+  const r = document.documentElement;
+  r.style.setProperty('--bg', bg);
+  r.style.setProperty('--input-bg', bg);
+  if(tx) {
+    r.style.setProperty('--text', tx);
+    r.style.setProperty('--black', tx);
+    r.style.setProperty('--border', tx==='#FFFFFF' ? 'rgba(255,255,255,0.15)' : 'rgba(17,17,17,0.1)');
+    r.style.setProperty('--muted', tx==='#FFFFFF' ? 'rgba(255,255,255,0.55)' : '#6B6B6B');
+  }
+  document.getElementById('a_bgCustom').value = bg;
+  markActiveSwatch('[data-bg]', bg);
+}
+function markActiveSwatch(selector, value) {
+  document.querySelectorAll(selector).forEach(el => {
+    const v = el.dataset.color || el.dataset.bg;
+    el.classList.toggle('active', v && v.toLowerCase() === (value||'').toLowerCase());
+  });
+}
+function pickFont(pairId) {
+  config.fontPair = pairId;
+  const pair = FONT_PAIRS.find(p=>p.id===pairId) || FONT_PAIRS[0];
+  document.documentElement.style.setProperty('--font-display', pair.display);
+  document.documentElement.style.setProperty('--font-body', pair.body);
+  document.querySelectorAll('.font-pair-card').forEach(c => {
+    c.classList.toggle('active', c.dataset.pair === pairId);
+  });
+}
+function renderFontPairs() {
+  const grid = document.getElementById('fontPairsGrid');
+  grid.innerHTML = '';
+  FONT_PAIRS.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'font-pair-card' + (config.fontPair === p.id ? ' active' : '');
+    div.dataset.pair = p.id;
+    div.onclick = () => pickFont(p.id);
+    div.innerHTML = `
+      <div class="font-pair-title" style="font-family:'${p.preview}',sans-serif,serif,cursive;">Donner c'est agir</div>
+      <div class="font-pair-body" style="font-family:'${p.previewBody}',sans-serif;">Votre impact, aujourd'hui.</div>
+      <div class="font-pair-name">${p.label}</div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function quickCurrency(sym, code) {
+  config.currency = sym;
+  config.currencyCode = code;
+  document.getElementById('a_currency').value = sym;
+  document.getElementById('a_currencyCode').value = code;
+  const el = document.getElementById('currencySymDisplay');
+  if(el) el.textContent = sym;
+}
+
+function renderDonationsList() {
+  const el = document.getElementById('donationsList');
+  if(!el) return;
+  const donations = JSON.parse(localStorage.getItem('donations') || '[]');
+  if(!donations.length) {
+    el.innerHTML = '<p style="color:rgba(255,255,255,0.3);font-size:14px;">Aucun virement déclaré pour l\'instant.</p>';
+    return;
+  }
+  // sort newest first
+  const sorted = [...donations].reverse();
+  const total = donations.reduce((s,d)=>s+d.amount,0);
+  let html = `<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:12px;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,0.3);padding:0 4px;">
+    <span>Nom</span><span>Email</span><span>Montant</span>
+  </div>`;
+  sorted.forEach(d => {
+    const date = new Date(d.date).toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'numeric'});
+    html += `<div style="display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;padding:10px 4px;border-top:1px solid rgba(255,255,255,0.06);font-size:13px;">
+      <span style="color:#fff;font-weight:500;">${d.name}<br><span style="color:rgba(255,255,255,0.3);font-size:11px;">${date}</span></span>
+      <span style="color:rgba(255,255,255,0.5);font-size:12px;">${d.email||'—'}</span>
+      <span style="font-family:var(--font-display);font-weight:700;color:var(--accent);white-space:nowrap;">${d.amount} ${d.currency}</span>
+    </div>`;
+  });
+  html += `<div style="margin-top:16px;padding:12px 16px;background:rgba(255,255,255,0.05);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+    <span style="color:rgba(255,255,255,0.5);font-size:13px;">${donations.length} virement(s) déclaré(s)</span>
+    <span style="font-family:var(--font-display);font-weight:800;font-size:20px;color:var(--accent);">${total} ${donations[0]?.currency||'€'}</span>
+  </div>`;
+  el.innerHTML = html;
+}
+function clearDonations() {
+  if(!confirm('Effacer tout l\'historique des virements ?')) return;
+  localStorage.removeItem('donations');
+  renderDonationsList();
+}
+
+// ========= INIT =========
+renderSite();
+</script>
+</body>
+</html>
